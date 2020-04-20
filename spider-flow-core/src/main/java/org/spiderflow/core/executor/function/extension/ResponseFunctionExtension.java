@@ -15,6 +15,7 @@ import org.spiderflow.core.utils.ExtractUtils;
 import org.spiderflow.executor.FunctionExtension;
 import org.spiderflow.io.SpiderResponse;
 import org.springframework.stereotype.Component;
+import us.codecraft.xsoup.Xsoup;
 
 @Component
 public class ResponseFunctionExtension implements FunctionExtension {
@@ -42,7 +43,11 @@ public class ResponseFunctionExtension implements FunctionExtension {
     public static List<String> xpaths(SpiderResponse response, String xpath) {
         return ExtractUtils.getValuesByXPath(element(response), xpath);
     }
-
+    @Comment("根据xpath在请求结果中查找,返回Elements")
+    @Example("${resp.xpathElements('//title')}")
+    public static Elements xpathXElements(SpiderResponse response, String xpath) {
+        return Xsoup.select(element(response),xpath).getElements();
+    }
     @Comment("根据正则表达式提取请求结果中的内容")
     @Example("${resp.regx('<title>(.*?)</title>')}")
     public static String regx(SpiderResponse response, String pattern) {

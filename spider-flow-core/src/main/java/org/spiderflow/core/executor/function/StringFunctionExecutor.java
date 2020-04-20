@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.spiderflow.annotation.Comment;
 import org.spiderflow.annotation.Example;
@@ -29,6 +31,11 @@ public class StringFunctionExecutor implements FunctionExecutor{
 	@Example("${string.substring(str,5)}")
 	public static String substring(String content, int beginIndex) {
 		return content != null ? content.substring(beginIndex) : null;
+	}
+	@Comment("字符串追加方法")
+	@Example("${string.addString(str,str1)}")
+	public static String addString(String content, String str1) {
+		return content+str1;
 	}
 
 	@Comment("截取字符串方法")
@@ -93,6 +100,16 @@ public class StringFunctionExecutor implements FunctionExecutor{
 	@Example("${string.replaceAll(content,regx,target)}")
 	public static String replaceAll(String content,String regx,String target){
 		return content != null ? content.replaceAll(regx, target): null;
+	}
+	@Comment("正则获取字符串")
+	@Example("${string.getOne(content,regx)}")
+	public static String getOne(String content,String regx){
+		Pattern pattern = Pattern.compile(regx);
+		Matcher matcher = pattern.matcher(content);
+		if(matcher.find()){
+			return matcher.group(1);
+		}
+		return null;
 	}
 	
 	@Comment("正则替换字符串")

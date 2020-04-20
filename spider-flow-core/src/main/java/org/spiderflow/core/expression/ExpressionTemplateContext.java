@@ -24,6 +24,7 @@ import org.spiderflow.core.expression.interpreter.AstInterpreter;
  */
 public class ExpressionTemplateContext {
 	private final List<Map<String, Object>> scopes = new ArrayList<Map<String, Object>>();
+	private  Map<String, Object> variables;
 
 	/** Keeps track of previously allocated, unused scopes. New scopes are first tried to be retrieved from this pool to avoid
 	 * generating garbage. **/
@@ -49,6 +50,7 @@ public class ExpressionTemplateContext {
 	
 	public ExpressionTemplateContext(Map<String,Object> variables) {
 		this();
+		this.variables=variables;
 		if(variables != null){
 			variables.forEach(this::set);
 		}
@@ -96,7 +98,9 @@ public class ExpressionTemplateContext {
 		}
 		return variables;
 	}
-
+	public  Map<String, Object>  getVariablesMap () {
+		return variables;
+	}
 	/** Internal. Pushes a new "scope" onto the stack. **/
 	public void push () {
 		Map<String, Object> newScope = freeScopes.size() > 0 ? freeScopes.remove(freeScopes.size() - 1) : new HashMap<String, Object>();
@@ -109,4 +113,5 @@ public class ExpressionTemplateContext {
 		oldScope.clear();
 		freeScopes.add(oldScope);
 	}
+
 }
