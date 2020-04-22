@@ -21,7 +21,7 @@
     <!-- WebSocket输出日志 -->
     <appender name="WebSocket" class="org.spiderflow.logback.SpiderFlowWebSocketAppender"/>
     <!-- 日志输出级别 -->
-    <root level="${LOG_LEVEL}">
+    <root level="debug">
         <appender-ref ref="Stdout" />
         <appender-ref ref="File" />
         <appender-ref ref="WebSocket" />

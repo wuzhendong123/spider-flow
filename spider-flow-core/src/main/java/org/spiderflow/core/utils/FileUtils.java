@@ -2,6 +2,7 @@ package org.spiderflow.core.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -176,7 +177,10 @@ public class FileUtils
         }
     }
 
-    public static DownloadStatus downloadFile(String savePath, String fileUrl, boolean downNew) {
+    public static DownloadStatus downloadFile(String savePath, String fileUrl ,boolean downNew) {
+        return downloadFile( savePath,  fileUrl,null , downNew);
+    }
+    public static DownloadStatus downloadFile(String savePath, String fileUrl,String fileName ,boolean downNew) {
         URL urlfile = null;
         HttpURLConnection httpUrl = null;
         BufferedInputStream bis = null;
@@ -184,11 +188,13 @@ public class FileUtils
         if (fileUrl.startsWith("//")) {
             fileUrl = "http:" + fileUrl;
         }
-        String fileName;
         try {
             urlfile = new URL(fileUrl);
             String urlPath = urlfile.getPath();
-            fileName = urlPath.substring(urlPath.lastIndexOf("/") + 1);
+            if(StringUtils.isEmpty(fileName)){
+                fileName = urlPath.substring(urlPath.lastIndexOf("/") + 1);
+            }
+
         } catch (MalformedURLException e) {
             logger.error("URL异常", e);
             return DownloadStatus.URL_ERROR;
