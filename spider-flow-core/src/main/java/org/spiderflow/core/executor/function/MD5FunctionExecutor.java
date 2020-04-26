@@ -24,6 +24,9 @@ public class MD5FunctionExecutor implements FunctionExecutor {
         return DigestUtils.md5Hex(str);
     }
 
+    public static void main(String[] args) {
+        System.out.println(DigestUtils.md5Hex("index"));
+    }
     @Comment("md5加密")
     @Example("${md5.string(resp.bytes)}")
     public static String string(byte[] bytes){

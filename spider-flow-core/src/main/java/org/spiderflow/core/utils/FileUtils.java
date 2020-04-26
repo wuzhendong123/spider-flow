@@ -180,6 +180,8 @@ public class FileUtils
     public static DownloadStatus downloadFile(String savePath, String fileUrl ,boolean downNew) {
         return downloadFile( savePath,  fileUrl,null , downNew);
     }
+
+
     public static DownloadStatus downloadFile(String savePath, String fileUrl,String fileName ,boolean downNew) {
         URL urlfile = null;
         HttpURLConnection httpUrl = null;
@@ -209,7 +211,7 @@ public class FileUtils
                 file.delete();
             } else {
                 logger.info("文件已存在不重新下载！");
-                return DownloadStatus.FILE_EXIST;
+                return DownloadStatus.DOWNLOAD_SUCCESS;
             }
         }
         try {
@@ -234,10 +236,10 @@ public class FileUtils
             httpUrl.disconnect();
             return DownloadStatus.DOWNLOAD_SUCCESS;
         } catch (SocketTimeoutException e) {
-            logger.error("读取文件超时", e);
+            logger.error("读取文件超时,fileUrl={}",fileUrl, e);
             return DownloadStatus.TIME_OUT;
         } catch (Exception e) {
-            logger.error("远程文件下载失败", e);
+            logger.error("远程文件下载失败,fileUrl={}",fileUrl, e);
             return DownloadStatus.DOWNLOAD_FAIL;
         } finally {
             try {

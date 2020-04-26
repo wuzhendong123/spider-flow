@@ -1,5 +1,11 @@
 package org.spiderflow.core.executor.function.extension;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -25,6 +31,24 @@ public class ResponseFunctionExtension implements FunctionExtension {
         return SpiderResponse.class;
     }
 
+    public static void main(String[] args) throws IOException {
+
+        URL url=new URL("https://mp.weixin.qq.com/s/UR9n1X18WiS79l-Jlf1rgw?scene=25#wechat_redirect");
+
+        String html="";
+        String tempHtml="";
+
+        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(url.openStream()));
+
+        while(!StringUtils.isBlank((tempHtml= bufferedReader.readLine()))){
+            html+=tempHtml;
+        }
+
+
+        String xpath="//*[@id=\"activity-detail\"]/div/div[2]/div";
+        Elements ElementsElements=Xsoup.select(html,xpath).getElements();
+        ElementsElements=Xsoup.select(html,xpath).getElements();
+    }
     @Comment("将请求结果转为Element对象")
     @Example("${resp.element()}")
     public static Element element(SpiderResponse response) {

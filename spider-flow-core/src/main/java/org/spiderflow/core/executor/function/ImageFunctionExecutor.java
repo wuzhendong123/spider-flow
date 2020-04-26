@@ -28,33 +28,58 @@ public class ImageFunctionExecutor implements FunctionExecutor {
 
     @Comment("将文件内的图片进行裁剪")
     @Example("${image.imageSubimage('path',10,10)}")
-    public static void imageSubimageFile(String path,String savePath,int subimageHeight,int subimageWidth,int limitHeight){
+    public static void imageSubimageFile(String rootPath,String replacePath,int subimageHeight,int subimageWidth,int limitHeight){
 
-        File parent=new File(path);
-        File[] files= parent.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return true;
-            }
-        });
+        File parent=new File(rootPath);
         try {
-            for(File file :files){
-                BufferedImage img= ImageIO.read(file);
-                int width=   img.getWidth();
-                int height=img.getHeight();
-                if(height>limitHeight){
-                    BufferedImage newImag=   img.getSubimage(0,0,width-subimageWidth,height-subimageHeight);
-                    ImageIO.write(newImag, "JPEG", new File(savePath+"/"+file.getName()+".jpg"));
-                }
-
-            }
+            imageFilePath(rootPath,parent,replacePath,subimageHeight,subimageWidth,limitHeight);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    @Comment("将文件内的图片进行裁剪")
+    @Example("${image.imageSubimageOneFile('path',10,10)}")
+    public static void imageSubimageOneFile(String rootPath,String fileName,String replacePath,int subimageHeight,int subimageWidth,int limitHeight){
+
+        File parent=new File(rootPath,fileName);
+        try {
+            imageFilePath(rootPath,parent,replacePath,subimageHeight,subimageWidth,limitHeight);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static  void imageFilePath(String rootPath,File file,String replacePath,int subimageHeight,int subimageWidth,int limitHeight) throws IOException {
+        File[] files=file.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return !(pathname.getPath().endsWith(".*"));
+            }
+        });
+        if(files==null||files.length<=0){
+            BufferedImage img= ImageIO.read(new File(file.getPath()));
+            int width=   img.getWidth();
+            int height=img.getHeight();
+            if(height>limitHeight){
+                File imageFile= new File(file.getPath().replaceAll("\\\\","/").replace(rootPath,replacePath));
+                if(!imageFile.exists()){
+                    imageFile.mkdirs();
+                }
+                BufferedImage newImag=   img.getSubimage(0,0,width-subimageWidth,height-subimageHeight);
+                ImageIO.write(newImag, "JPEG", imageFile);
+            }
+        }else{
+            for(File childFile:files){
+                imageFilePath(rootPath,childFile,replacePath,subimageHeight,subimageWidth,limitHeight);
+            }
+
+        }
+    }
+
     @Comment("将url文件内的图片进行裁剪")
-    @Example("${image.imageSubimage('path',10,10)}")
+    @Example("${image.imageSubimage('path','savePath',10,10)}")
     public static void imageSubimageUrl(String path,String savePath,int subimageHeight,int subimageWidth,int limitHeight){
 
         try {
@@ -66,7 +91,7 @@ public class ImageFunctionExecutor implements FunctionExecutor {
                 int height=img.getHeight();
                 if(height>limitHeight){
                     BufferedImage newImag=   img.getSubimage(0,0,width-subimageWidth,height-subimageHeight);
-                    ImageIO.write(newImag, "JPEG", new File(savePath+"/"+fileName+".jpg"));
+                    ImageIO.write(newImag, "JPEG", new File(savePath+"/"+fileName));
                 }
 
 
