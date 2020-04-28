@@ -50,7 +50,7 @@ public class SpiderRestController {
 	 * @return
 	 */
 	@RequestMapping("/runAsync/{id}")
-	public JsonBean<Integer> runAsync(@PathVariable("id")String id){
+	public JsonBean<String> runAsync(@PathVariable("id")String id){
 		SpiderFlow flow = spiderFlowService.getById(id);
 		if(flow == null){
 			return new JsonBean<>(0, "找不到此爬虫信息");
@@ -106,7 +106,7 @@ public class SpiderRestController {
 			return new JsonBean<>(0, "找不到此爬虫信息");
 		}
 		List<SpiderOutput> outputs;
-		Integer maxId = spiderFlowService.getFlowMaxTaskId(id);
+		String maxId = spiderFlowService.getFlowMaxTaskId(id);
 		SpiderJobContext context = SpiderJobContext.create(workspace, id,maxId,true);
 		try{
 			outputs = spider.run(flow,context, params);	

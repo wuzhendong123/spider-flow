@@ -1,6 +1,7 @@
 package org.spiderflow.core.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -21,7 +22,7 @@ public class DataSource {
     private String username;
 
     private String password;
-
+    @TableField("create_date")
     private Date createDate;
 
     public DataSource() {

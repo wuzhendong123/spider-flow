@@ -166,7 +166,7 @@ public class SpiderFlowController {
 	@RequestMapping("/log/download")
 	public ResponseEntity<FileSystemResource> download(String id, String taskId)  {
 		if (StringUtils.isBlank(taskId) || NumberUtils.toInt(taskId,0) == 0) {
-			Integer maxId = spiderFlowService.getFlowMaxTaskId(id);
+			String maxId = spiderFlowService.getFlowMaxTaskId(id);
 			taskId = maxId == null ? "" : maxId.toString();
 		}
 		File file = new File(workspace, id + File.separator + "logs" + File.separator + taskId + ".log");
@@ -179,7 +179,7 @@ public class SpiderFlowController {
 	@RequestMapping("/log")
 	public JsonBean<List<Line>> log(String id, String taskId, String keywords, Long index, Integer count, Boolean reversed, Boolean matchcase, Boolean regx) {
 		if (StringUtils.isBlank(taskId)) {
-			Integer maxId = spiderFlowService.getFlowMaxTaskId(id);
+			String maxId = spiderFlowService.getFlowMaxTaskId(id);
 			taskId = maxId == null ? "" : maxId.toString();
 		}
 		File logFile = new File(workspace, id + File.separator + "logs" + File.separator + taskId + ".log");

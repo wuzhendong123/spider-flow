@@ -38,7 +38,7 @@ public class SpiderJob extends QuartzJobBean {
 	@Autowired
 	private TaskService taskService;
 
-	private static Map<Integer, SpiderContext> contextMap = new HashMap<>();
+	private static Map<String, SpiderContext> contextMap = new HashMap<>();
 
 	@Value("${spider.job.enable:true}")
 	private boolean spiderJobEnable;

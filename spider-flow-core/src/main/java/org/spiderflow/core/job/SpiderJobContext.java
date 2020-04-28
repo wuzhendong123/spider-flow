@@ -54,7 +54,7 @@ public class SpiderJobContext extends SpiderContext{
 		return this.outputstream;
 	}
 	
-	public static SpiderJobContext create(String directory,String id,Integer taskId,boolean output){
+	public static SpiderJobContext create(String directory,String id,String taskId,boolean output){
 		OutputStream os = null;
 		try {
 			File file = new File(new File(directory),id + File.separator + "logs" + File.separator + taskId + ".log");
